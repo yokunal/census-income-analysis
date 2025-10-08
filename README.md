@@ -26,8 +26,8 @@ Understanding income distribution patterns is crucial for:
 - **Social Research**: Analyzing income inequality factors
 
 ## 📁 Project Structure
-
-```income-prediction-analysis/
+```
+income-prediction-analysis/
 ├── data/
 │ ├── raw.csv # Original dataset
 │ ├── cleaned_data.csv # Processed dataset
@@ -42,8 +42,8 @@ Understanding income distribution patterns is crucial for:
 │ └── final.ipynb # Complete analysis demo
 ├── requirements.txt # Dependencies
 ├── README.md # Project documentation
-└── LICENSE # MIT license```
-
+└── LICENSE # MIT license
+```
 
 ## 🚀 Quick Start
 
@@ -53,7 +53,7 @@ Understanding income distribution patterns is crucial for:
 
 ### Installation
 
-1. **Clone the repository**
+1. -**Clone the repository**
 
 git clone https://github.com/yourusername/income-prediction-analysis.git
 cd income-prediction-analysis
