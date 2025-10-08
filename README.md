@@ -27,7 +27,7 @@ Understanding income distribution patterns is crucial for:
 
 ## 📁 Project Structure
 
-income-prediction-analysis/
+```income-prediction-analysis/
 ├── data/
 │ ├── raw.csv # Original dataset
 │ ├── cleaned_data.csv # Processed dataset
@@ -42,7 +42,7 @@ income-prediction-analysis/
 │ └── final.ipynb # Complete analysis demo
 ├── requirements.txt # Dependencies
 ├── README.md # Project documentation
-└── LICENSE # MIT license
+└── LICENSE # MIT license```
 
 
 ## 🚀 Quick Start
