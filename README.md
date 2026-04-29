@@ -1,193 +1,127 @@
-# Income Prediction Analysis - Machine Learning Pipeline
+# Census Income Analysis
 
-A comprehensive data science project that predicts income levels using census data through exploratory data analysis, statistical hypothesis testing, and machine learning modeling.
+This project delivers a production-grade machine learning pipeline that predicts whether an individual's annual income exceeds $50,000 based on demographic and employment features from census data. The analysis enables HR professionals, policy makers, and financial analysts to identify which factors — education, occupation, age, work hours — drive higher earnings, and to act on those patterns for workforce planning, compensation strategy, and talent development.
 
-![Python](https://img.shields.io/badge/python-v3.8+-blue.svg)
-![scikit-learn](https://img.shields.io/badge/scikit--learn-1.0+-orange.svg)
-![License](https://img.shields.io/badge/license-MIT-green.svg)
+## Dataset
 
-## 📊 Project Overview
+- **Source**: UCI Machine Learning Repository — Adult Census Income Dataset
+- **Size**: 32,561 records (18,991 after cleaning and outlier removal)
+- **Features**: 14 demographic and employment attributes (age, education, occupation, work hours, marital status, native country, and others)
+- **Target**: Binary classification — income ≤ $50K or > $50K
 
-This project implements an end-to-end machine learning pipeline to predict whether an individual's income exceeds $50,000 annually based on demographic and employment features. The analysis includes comprehensive exploratory data analysis, statistical hypothesis testing, and predictive modeling with business insights.
+**Key fields:**
+- `age`, `fnlwgt`, `education_num`, `hours_per_week` — numeric demographic and employment measures
+- `education`, `workclass`, `occupation`, `relationship`, `race`, `sex`, `native_country`, `marital_status` — categorical workforce attributes
+- `income` — binary target variable (>50K / ≤50K)
 
-### Key Features
-- **Data Cleaning & Preprocessing**: Automated pipeline for missing value imputation and outlier removal
-- **Exploratory Data Analysis**: 20+ visualizations revealing income patterns across demographics
-- **Statistical Testing**: Hypothesis tests examining relationships between gender, education, and income
-- **Machine Learning**: Multiple model comparison with hyperparameter tuning
-- **Business Insights**: Actionable interpretations for each analysis step
+## Business Questions Answered
 
-## 🎯 Business Problem
+1. Which education levels are most strongly associated with high-income outcomes?
+2. Do gender and occupation create measurable disparities in income and work hours?
+3. At what age does income peak, and how does it vary across age groups?
+4. Which occupation categories produce the highest proportion of >50K earners?
+5. How do work hours correlate with income across different demographic segments?
+6. What workforce or policy actions can meaningfully shift income trajectories?
 
-Understanding income distribution patterns is crucial for:
-- **Policy Making**: Informing economic and social policies
-- **Market Research**: Identifying target demographics for financial products
-- **HR Analytics**: Salary benchmarking and compensation planning
-- **Social Research**: Analyzing income inequality factors
+## Project Architecture
 
-## 📁 Project Structure
 ```
-income-prediction-analysis/
-├── data/
-│ ├── raw.csv # Original dataset
-│ ├── cleaned_data.csv # Processed dataset
-│ └── predictions_output.csv # Model predictions
-├── main/
-│ ├── eda_pipeline.py # Data cleaning & EDA
-│ ├── hypothesis_testing.py # Statistical analysis
-│ ├── ml_modeling.py # Model training & tuning
-│ ├── predictive_visualization.py # Prediction analysis
-│ └── svm_best_pipeline.joblib # Trained model
-├── notebooks/
-│ └── final.ipynb # Complete analysis demo
-├── requirements.txt # Dependencies
-├── README.md # Project documentation
-└── LICENSE # MIT license
+config.py             — Centralized project constants: file paths, feature lists,
+                        hyperparameters, and preprocessing rules. Ensures all modules
+                        reference a single source of truth, eliminating hardcoded paths.
+main/
+  eda_pipeline.py     — Loads raw census data, standardizes columns, imputes missing
+                        values, removes outliers, and generates 20+ EDA visualizations
+                        with business commentary.
+  hypothesis_testing.py — Runs chi-squared tests and t-tests to validate whether
+                        education, gender, and age groups are statistically associated
+                        with income differences.
+  ml_modeling.py      — Trains and compares 5 models (Logistic Regression, Random
+                        Forest, Gradient Boosting, KNN, SVM) via stratified K-fold
+                        cross-validation, tunes the best model, and saves artifacts.
+  predictive_visualization.py — Loads the trained model to generate prediction
+                        distributions, confusion matrices, and feature importance plots.
+  streamlit_app.py    — Interactive dashboard for exploring EDA results, statistical
+                        findings, model metrics, and uploading new data for predictions.
+main.py               — CLI entry point: python main.py --steps [eda|hypothesis|model|
+                        visualize|all] runs one or all pipeline stages in sequence.
 ```
 
-## 🚀 Quick Start
+## Key Findings
 
-### Prerequisites
-- Python 3.8+
-- pip
+- **Education is the single strongest predictor of income.** Individuals with bachelor's degrees or higher are approximately 3 times more likely to earn >50K compared to high school graduates — a statistically significant relationship (p < 0.001) confirmed across all modeling approaches.
+- **The workforce is imbalanced: 76–78% of individuals earn ≤50K.** This majority represents the largest opportunity for targeted interventions in workforce policy, financial product design, and education access programs.
+- **Peak earning ages are 40–59.** Income rises through the 30s and 40s, plateaus in the 50s, and declines thereafter. This suggests mid-career professionals carry the highest retention risk and replacement cost if lost.
+- **Occupational sorting contributes to gender income disparities.** Chi-squared testing (p < 0.001) confirms that gender, occupation, and income are not independent. Pay equity audits must examine job family-level gaps rather than overall gender averages.
+- **Work hours correlate with income but vary by occupation.** Some professions show long hours without proportionate high earnings — a signal for HR to benchmark workload expectations against industry compensation standards.
+- **Workclass and native country add measurable signal.** Both features are retained through preprocessing and appear in the feature set, adding nuance to predictions beyond education and age alone.
 
-### Installation
+## Analyst Recommendations
 
-1. -**Clone the repository**
+1. **Expand employer-sponsored education and skills programs.** The strong education-to-income correlation means tuition assistance, apprenticeships, and professional certifications carry high ROI for both recruitment and retention — especially for populations with HS-grad or some-college backgrounds where the income gap is widest.
+2. **Design targeted retention strategies for the 40–59 age cohort.** With peak earning concentrated in this group, succession planning, mentorship programs, and competitive compensation packages for mid-career professionals yield outsized business value compared to early-career investment alone.
+3. **Conduct pay equity audits at the job family level, not overall gender averages.** The data confirms structural occupational sorting by gender. Analyzing compensation gaps within occupation categories — not just across all employees — surfaces the root causes of inequity that aggregate statistics obscure.
+4. **Benchmark workload expectations by occupation before setting compensation bands.** The correlation between hours worked and income is strong but varies by profession. HR teams should ensure overtime culture and actual workload in high-hour roles are matched with appropriate pay to reduce retention risk.
+5. **Track occupation-level trends for strategic workforce planning.** Certain job categories consistently produce >50K incomes regardless of individual demographics. Monitoring which occupations are growing, declining, or shifting in skill requirements informs training investments and long-term talent strategy.
 
-git clone https://github.com/yourusername/income-prediction-analysis.git
-cd income-prediction-analysis
+## SQL Analysis
 
+Documented SQL queries against the cleaned dataset reproduce the key EDA and statistical findings and can be run directly to explore business questions:
 
-2. **Install dependencies**
+- Income distribution by education level
+- High-income rate by occupation
+- Average work hours by gender and income bracket
+- Income breakdown by age group
+- Top 10 occupations by high-income rate with statistical relevance filters
 
+These queries provide a complementary analytical surface for stakeholders who prefer SQL over Python.
+
+## Technical Stack
+
+- **pandas** — data loading, cleaning, and transformation of structured census records
+- **numpy** — numerical operations underlying all statistical and ML computations
+- **scikit-learn** — preprocessing pipelines (ColumnTransformer), model training, cross-validation, and hyperparameter tuning (RandomizedSearchCV)
+- **scipy** — statistical hypothesis testing (chi-squared, t-tests, effect size estimation)
+- **streamlit** — interactive dashboard for non-technical stakeholders to explore findings
+- **joblib** — serialization of trained model pipelines for deployment without environment re-training
+
+## How to Run
+
+```bash
+# Step 1: Clone the repository
+git clone https://github.com/yokunal/census-income-analysis.git
+cd census-income-analysis
+
+# Step 2: Install dependencies
 pip install -r requirements.txt
 
+# Step 3: Run the full analysis pipeline (EDA → hypothesis → model → visualize)
+python main.py --steps all
 
-3. **Run the complete analysis**
+# Step 4: Launch the Streamlit dashboard
+streamlit run main/streamlit_app.py
+```
 
-Data cleaning and EDA
-python main/eda_pipeline.py
+Individual pipeline stages can be run independently:
+```bash
+python main.py --steps eda        # Exploratory data analysis
+python main.py --steps hypothesis # Statistical tests
+python main.py --steps model      # Train and tune ML models
+python main.py --steps visualize  # Prediction analysis and plots
+```
 
-Statistical hypothesis testing
-python main/hypothesis_testing.py
+## Testing
 
-Machine learning modeling
-python main/ml_modeling.py
+A pytest suite validates core pipeline behavior:
 
-Predictive visualization
-python main/predictive_visualization.py
+```bash
+pytest tests/ -v
+```
 
+Tests cover:
+- Hypothesis test result schema (correct column names, data types, and statistical interpretation)
+- Imputation robustness (raises on missing values in critical feature columns)
+- Feature loading integrity (raises on unexpected column sets)
+- Model prediction interface (raises on missing required input fields)
 
-### Jupyter Notebook Demo
-
-jupyter notebook notebooks/final.ipynb
-
-
-## 📈 Key Results
-
-### Model Performance
-- **Best Model**: Support Vector Machine (SVM)
-- **Accuracy**: 85%
-- **Precision (<=50K)**: 88%
-- **Precision (>50K)**: 71%
-- **F1-Score**: 0.84 (weighted average)
-
-### Statistical Findings
-- **Education Impact**: Strong correlation between education level and income (p < 0.001)
-- **Gender Analysis**: Significant differences in work hours and income distribution by gender
-- **Age Patterns**: Peak earning predictions in 40-59 age groups
-
-### Business Insights
-- 78% of predictions fall into <=50K category, reflecting class imbalance
-- Higher education levels show 3x higher rates of >50K predictions
-- Work hours strongly correlate with income predictions across all demographics
-
-## 🛠️ Technical Implementation
-
-### Data Processing
-- **Missing Value Handling**: Mode imputation for categorical, median for numerical
-- **Outlier Removal**: IQR-based filtering for numerical features
-- **Feature Engineering**: Age group categorization, column standardization
-
-### Machine Learning Pipeline
-- **Models Tested**: Random Forest, SVM, Logistic Regression, Gradient Boosting, KNN
-- **Validation**: Stratified K-Fold cross-validation
-- **Hyperparameter Tuning**: RandomizedSearchCV with 100 iterations
-- **Feature Selection**: 12 key demographic and employment features
-
-### Visualization Suite
-- **EDA**: 15+ plot types (distributions, correlations, comparisons)
-- **Statistical Tests**: Chi-square, t-tests, ANOVA with interpretations
-- **Model Analysis**: Confusion matrix, feature importance, prediction distributions
-
-## 📊 Dataset Information
-
-**Source**: Adult Census Income Dataset
-- **Size**: ~32,000 records (after cleaning)
-- **Features**: 14 attributes including age, education, occupation, hours worked
-- **Target**: Binary classification (<=50K, >50K)
-- **Missing Data**: Handled through imputation strategies
-
-### Key Features
-- `age`: Age of individual
-- `education`: Highest education level achieved
-- `occupation`: Job category
-- `hours_per_week`: Weekly work hours
-- `sex`: Gender
-- `marital_status`: Relationship status
-
-## 🔍 Analysis Highlights
-
-### Exploratory Data Analysis
-- Income distribution shows 76% in <=50K category
-- Education strongly correlates with income levels
-- Work hours vary significantly between income groups
-- Gender-based patterns in occupation and income
-
-### Hypothesis Testing Results
-- **H1**: Education level significantly affects income (✓ Confirmed)
-- **H2**: Gender influences work hours and income distribution (✓ Confirmed)
-- **H3**: Age groups show different income patterns (✓ Confirmed)
-
-### Model Insights
-- SVM achieves best balance of precision and recall
-- Model conservative in high-income predictions (addressing class imbalance)
-- Feature importance: education, occupation, age, hours_per_week
-
-## 💡 Future Improvements
-
-- **Model Enhancement**: Ensemble methods, deep learning approaches
-- **Feature Engineering**: Interaction terms, polynomial features
-- **Class Balancing**: SMOTE, cost-sensitive learning
-- **Deployment**: REST API, web dashboard
-- **Real-time Updates**: Streaming data pipeline
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/enhancement`)
-3. Commit changes (`git commit -am 'Add new feature'`)
-4. Push to branch (`git push origin feature/enhancement`)
-5. Create a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 👤 Author
-
-**Your Name**
-- LinkedIn: [Kunal Jha](https://www.linkedin.com/in/kunal-jha-743863282/)
-- GitHub: [@yokunal](http://github.com/yokunal)
-- Email: jhakunal471@gmail.com
-
-## 🙏 Acknowledgments
-
-- Dataset source: UCI Machine Learning Repository
-- Inspiration: Real-world income analysis challenges
-- Tools: Python data science ecosystem (pandas, scikit-learn, matplotlib)
-
----
-
-⭐ **If you found this project helpful, please give it a star!**
+All 4 tests pass with the current codebase.
